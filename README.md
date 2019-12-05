@@ -1,6 +1,6 @@
 # DataStreamBuilder
 
-![https://img.shields.io/pub/v/flutter_data_stream_builder?style=flat-square]
+![Pub](https://img.shields.io/pub/v/flutter_data_stream_builder?style=flat-square)
 
 A pragmatic `StreamBuilder` with sensible defaults.
 
