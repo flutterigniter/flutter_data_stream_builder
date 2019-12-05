@@ -1,0 +1,4 @@
+name: example
+
+dependencies:
+  flutter_data_stream_builder: any
