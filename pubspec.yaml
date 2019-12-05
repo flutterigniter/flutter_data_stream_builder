@@ -1,6 +1,6 @@
 name: flutter_data_stream_builder
 description: A pragmatic StreamBuilder with sensible defaults
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/flutterigniter/flutter_data_stream_builder
 
 environment:

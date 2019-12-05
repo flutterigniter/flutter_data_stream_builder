@@ -1,3 +1,11 @@
+## [0.0.4] - 2019-12-05
+
+* Documentation, formatting, changelog
+
+## [0.0.3] - 2019-12-05
+
+* Documentation and examples
+
 ## [0.0.2] - 2019-12-05
 
 * Add README and example
