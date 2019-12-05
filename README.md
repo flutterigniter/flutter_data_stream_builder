@@ -4,11 +4,38 @@
 
 A pragmatic `StreamBuilder` with sensible defaults.
 
-It uses three different builders:
+## The problem with StreamBuilder
 
-  - `builder`: invoked only when stream data is ready (required as parameter)
-  - `loadingBuilder`: invoked when waiting for data (not required, the library provides a default)
-  - `errorBuilder`: invoked when an error is present in the stream (not required, the library provides a default)
+`StreamBuilder` is an essential tool to work with BLoCs or generally any stream.
+
+But with enough streams in our codebase, a lot of boilerplate is introduced. Code gets repetitive and can't be easily reused:
+
+```dart
+StreamBuilder(
+  stream: bloc.stock,
+  builder: (context, AsyncSnapshot<Stock> snapshot) {
+    if (snapshot.hasData) {
+      return Text(snapshot.data.stock.toString());
+    } else if (snapshot.hasError) {
+      return Text(snapshot.error.toString());
+    }
+    return Center(child: CircularProgressIndicator());
+  },
+),
+```
+
+`DataStreamBuilder` aims to fix these issues for the common usecase:
+
+```dart
+StreamBuilder(
+  stream: bloc.stock,
+  builder: (context, Stock stock) => Text(stock.local.toString())
+),
+```
+
+This library provides default builders for the loading and error states (can be supplied as `loadingBuilder` and `errorBuilder`), and only calls `builder` when data is present.
+
+*Note: if you need fine-grained control over `ConnectionState`s to the underlying computation, just use `StreamBuilder`.*
 
 ## Usage
 
@@ -37,3 +64,35 @@ DataStreamBuilder<List<Post>>(
 ```
 
 See tests and the Example tab for a full example.
+
+## Extending
+
+We can easily extend the class in order to provide our own app-wide defaults.
+
+For instance, we could implement a branded loader:
+
+```dart
+class BrandedDataStreamBuilder<T> extends DataStreamBuilder<T> {
+
+  static final brandedLoadingBuilder = (context) => Text('Custom branded loading...');
+
+  BrandedDataStreamBuilder({
+    Key key,
+    @required Stream<T> stream,
+    @required DataWidgetBuilder<T> builder,
+    DataErrorWidgetBuilder errorBuilder
+  }) :
+    assert(builder != null),
+    super(
+      key: key,
+      stream: stream,
+      builder: builder,
+      loadingBuilder: brandedLoadingBuilder,
+      errorBuilder: errorBuilder
+    );
+}
+```
+
+In action:
+
+![sample](example/a.gif)

@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: DataStreamBuilder<List<int>>(
-              stream: _timedCounter(),
-              builder: (context, List<int> numbers) => ListView(
-                children: numbers.map((n) => ListTile(
-                  title: Center(child: Text(n.toString())))
-                ).toList(),
-              )
-            ),
+            stream: _timedCounter(),
+            builder: (context, List<int> numbers) => ListView(
+              children: numbers.map((n) => ListTile(
+                title: Center(child: Text(n.toString())))
+              ).toList(),
+            )
+          ),
         ),
       ),
     );
