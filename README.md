@@ -4,7 +4,7 @@
 
 A pragmatic `StreamBuilder` with sensible defaults.
 
-## The problem with StreamBuilder
+## 😩 The problem with StreamBuilder
 
 `StreamBuilder` is an essential tool to work with BLoCs or generally any stream.
 
@@ -37,7 +37,7 @@ This library provides default builders for the loading and error states (can be 
 
 *Note: if you need fine-grained control over `ConnectionState`s to the underlying computation, just use `StreamBuilder`.*
 
-## Usage
+## 👩🏾‍💻 Usage
 
 Using defaults for loading and error states:
 
@@ -65,7 +65,7 @@ DataStreamBuilder<List<Post>>(
 
 See tests and the Example tab for a full example.
 
-## Extending
+## 🛠 Extending
 
 We can easily extend the class in order to provide our own app-wide defaults.
 
@@ -96,3 +96,11 @@ class BrandedDataStreamBuilder<T> extends DataStreamBuilder<T> {
 In action:
 
 ![sample](example/a.gif)
+
+## ➕ Collaborating
+
+Please use Github to open issues and send PRs. Thanks 🙌
+
+## 📝 License
+
+MIT
