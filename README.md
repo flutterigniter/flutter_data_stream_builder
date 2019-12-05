@@ -35,6 +35,8 @@ StreamBuilder(
 
 This library provides default builders for the loading and error states (can be supplied as `loadingBuilder` and `errorBuilder`), and only calls `builder` when data is present.
 
+Depending on your current `StreamBuilder`s this could be a drop-in replacement. In any case, it's super easy to migrate to `DataStreamBuilder`.
+
 *Note: if you need fine-grained control over `ConnectionState`s to the underlying computation, just use `StreamBuilder`.*
 
 ## 👩🏾‍💻 Usage
@@ -50,7 +52,29 @@ DataStreamBuilder<List<Post>>(
 )
 ```
 
-Custom loading and error widgets:
+In case you are wondering, these are the defaults:
+
+Default loading widget:
+
+```dart
+(context) => Center(child: CircularProgressIndicator());
+```
+
+Default error widget:
+
+```dart
+(context, dynamic error) {
+  error = error is Exception ? error.toString() : 'Error: $error';
+  return Center(child: Text(
+      error,
+      textDirection: TextDirection.ltr,
+      style: TextStyle(backgroundColor: Colors.red, color: Colors.white),
+    )
+  );
+};
+```
+
+Another example with custom loading and error widgets:
 
 ```dart
 DataStreamBuilder<List<Post>>(
