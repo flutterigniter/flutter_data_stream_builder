@@ -95,7 +95,7 @@ final stream = Repository.of<Post>().findAll();
 
 DataStreamBuilder<List<Post>>(
   stream: stream, // async access to stream
-  initialValue: stream.value, // sync access to latest value
+  initialData: stream.value, // sync access to latest value
   builder: (context, List<Post> posts) => ListView(
     children: posts.map((post) => ListTile(title: Text(post.body))).toList(),
   )
