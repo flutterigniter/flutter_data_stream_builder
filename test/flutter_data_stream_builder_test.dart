@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_data_stream_builder/flutter_data_stream_builder.dart';
 
 void main() {
-  
   Widget _centeredText(String text) {
     return Center(child: Text(text, textDirection: TextDirection.ltr));
   }
@@ -21,7 +20,9 @@ void main() {
       final controller = StreamController<int>();
 
       await tester.pumpWidget(DataStreamBuilder<int>(
-        key: key, stream: controller.stream, builder: textBuilder,
+        key: key,
+        stream: controller.stream,
+        builder: textBuilder
       ));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -70,6 +71,28 @@ void main() {
       controller.addError(Exception('bad'));
       await tester.pump(Duration.zero);
       expect(find.text('Oops something went wrong!'), findsOneWidget);
+
+      controller.close();
+    });
+
+    testWidgets('does not cause jank on initial data', (tester) async {
+
+      final GlobalKey key = GlobalKey();
+      final controller = StreamController<List<int>>();
+
+      final loadingWidget = _centeredText('LOADING');
+      final dataWidget = _centeredText('DATA');
+
+      await tester.pumpWidget(DataStreamBuilder<List<int>>(
+        key: key,
+        stream: Stream.fromIterable([[1, 2], [2, 3]]),
+        initialData: [0, 0],
+        loadingBuilder: (context) => loadingWidget,
+        builder: (_, __) => dataWidget
+      ));
+
+      expect(find.byWidget(loadingWidget), findsNothing);
+      expect(find.byWidget(dataWidget), findsOneWidget);
 
       controller.close();
     });

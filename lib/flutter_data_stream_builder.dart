@@ -50,11 +50,12 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
   ///
   /// Sensible defaults are provided for [loadingBuilder] and [errorBuilder].
   ///
-  /// If you wish to supply initial data, override [loadingBuilder].
-  ///
+  /// The [initialData] is used to create the initial snapshot.
+  /// 
   /// The [stream] and [builder] must not be null.
   const DataStreamBuilder(
       {Key key,
+      this.initialData,
       @required Stream<T> stream,
       @required this.builder,
       WidgetBuilder loadingBuilder,
@@ -63,6 +64,9 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
         this.loadingBuilder = loadingBuilder,
         this.errorBuilder = errorBuilder,
         super(key: key, stream: stream);
+
+  /// The data that will be supplied to the builder in the first frame.
+  final T initialData;
 
   /// The build strategy used by this builder to render the loading state.
   final WidgetBuilder loadingBuilder;
@@ -75,11 +79,11 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
 
   @override
   AsyncSnapshot<T> initial() =>
-      AsyncSnapshot<T>.withData(ConnectionState.none, null);
+      AsyncSnapshot<T>.withData(ConnectionState.none, initialData);
 
   @override
-  AsyncSnapshot<T> afterConnected(_) =>
-      AsyncSnapshot<T>.withData(ConnectionState.waiting, null);
+  AsyncSnapshot<T> afterConnected(current) =>
+      current.inState(ConnectionState.waiting);
 
   @override
   AsyncSnapshot<T> afterData(_, T data) =>
@@ -90,10 +94,10 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
       AsyncSnapshot<T>.withError(ConnectionState.active, error);
 
   @override
-  AsyncSnapshot<T> afterDone(AsyncSnapshot<T> current) => current;
+  AsyncSnapshot<T> afterDone(AsyncSnapshot<T> current) => current.inState(ConnectionState.done);
 
   @override
-  AsyncSnapshot<T> afterDisconnected(AsyncSnapshot<T> current) => current;
+  AsyncSnapshot<T> afterDisconnected(AsyncSnapshot<T> current) => current.inState(ConnectionState.none);
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<T> summary) {

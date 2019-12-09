@@ -1,3 +1,7 @@
+## [0.0.5] - 2019-12-09
+
+* Add support for initial data
+
 ## [0.0.4] - 2019-12-05
 
 * Documentation, formatting, changelog

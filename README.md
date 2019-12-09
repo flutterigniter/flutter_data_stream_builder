@@ -27,7 +27,7 @@ StreamBuilder(
 `DataStreamBuilder` aims to fix these issues for the common usecase:
 
 ```dart
-StreamBuilder(
+DataStreamBuilder(
   stream: bloc.stock,
   builder: (context, Stock stock) => Text(stock.local.toString())
 ),
@@ -81,6 +81,21 @@ DataStreamBuilder<List<Post>>(
   stream: Repository.of<Post>().findAll(),
   loadingBuilder: (context) => Center(child: Text('Loading posts...')),
   errorBuilder: (context, error) => PostErrorView(error),
+  builder: (context, List<Post> posts) => ListView(
+    children: posts.map((post) => ListTile(title: Text(post.body))).toList(),
+  )
+)
+```
+
+Initial values can also be supplied:
+
+```dart
+// a stream that is a RxDart ValueObservable
+final stream = Repository.of<Post>().findAll();
+
+DataStreamBuilder<List<Post>>(
+  stream: stream, // async access to stream
+  initialValue: stream.value, // sync access to latest value
   builder: (context, List<Post> posts) => ListView(
     children: posts.map((post) => ListTile(title: Text(post.body))).toList(),
   )
