@@ -9,8 +9,6 @@ typedef DataErrorWidgetBuilder = Widget Function(
 /// Widget that builds itself based on the latest
 /// loading, error and data states from a [Stream].
 ///
-/// {@tool sample}
-///
 /// This sample shows a [DataStreamBuilder] rendering a list of posts
 /// provided by an underlying websocket connection.
 ///
@@ -36,8 +34,6 @@ typedef DataErrorWidgetBuilder = Widget Function(
 ///   )
 /// )
 /// ```
-///
-/// {@end-tool}
 ///
 /// See also:
 ///
