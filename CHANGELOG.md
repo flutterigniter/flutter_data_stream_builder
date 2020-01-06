@@ -1,3 +1,7 @@
+## [0.0.6] - 2020-01-06
+
+* Add support for RxDart `ValueStream`: automatic initial data
+
 ## [0.0.5] - 2019-12-09
 
 * Add support for initial data
