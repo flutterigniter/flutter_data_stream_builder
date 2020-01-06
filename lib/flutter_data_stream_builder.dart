@@ -1,6 +1,7 @@
 library flutter_data_stream_builder;
 
 import 'package:flutter/material.dart';
+import 'package:rxdart/streams.dart';
 
 typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 typedef DataErrorWidgetBuilder = Widget Function(
@@ -74,8 +75,10 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
   final DataWidgetBuilder<T> builder;
 
   @override
-  AsyncSnapshot<T> initial() =>
-      AsyncSnapshot<T>.withData(ConnectionState.none, initialData);
+  AsyncSnapshot<T> initial() {
+    final data = stream is ValueStream && (stream as ValueStream).hasValue ? (stream as ValueStream).value : initialData;
+    return AsyncSnapshot<T>.withData(ConnectionState.none, data);
+  }
 
   @override
   AsyncSnapshot<T> afterConnected(current) =>
@@ -97,26 +100,31 @@ class DataStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshot<T>> {
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<T> summary) {
-    if (summary.hasError) return _getError(context, summary.error);
-    if (summary.hasData) return builder(context, summary.data);
-    return _getLoading(context);
+    if (summary.hasError) {
+      return _getErrorWidget(context, summary.error);
+    }
+    if (summary.hasData) {
+      return builder(context, summary.data);
+    }
+    return _getLoadingWidget(context);
   }
 
-  Widget _getLoading(BuildContext context) {
+  Widget _getLoadingWidget(BuildContext context) {
     return loadingBuilder?.call(context) ??
         Center(child: CircularProgressIndicator());
   }
 
-  Widget _getError(BuildContext context, dynamic error) {
+  Widget _getErrorWidget(BuildContext context, dynamic error) {
     final _errorBuilder = errorBuilder ??
         (context, dynamic error) {
           error = error is Exception ? error.toString() : 'Error: $error';
           return Center(
-              child: Text(
-            error,
-            textDirection: TextDirection.ltr,
-            style: TextStyle(backgroundColor: Colors.red, color: Colors.white),
-          ));
+            child: Text(
+              error,
+              textDirection: TextDirection.ltr,
+              style: TextStyle(backgroundColor: Colors.red, color: Colors.white),
+            )
+          );
         };
     return _errorBuilder.call(context, error);
   }
